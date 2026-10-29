@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),vm=require('vm'),fs=require('fs');
+const source=fs.readFileSync(require('path').join(__dirname,'../admin/editor.js'),'utf8');
+const elements=new Map(),classes=new Set(),nav=['overview','posts','editor','ads','import','media'].map(name=>({dataset:{nav:name},hidden:false,classList:{toggle(){}}}));
+const $=id=>{if(!elements.has(id))elements.set(id,{disabled:false,hidden:false,value:'',textContent:'',classList:{toggle(){},add(){},remove(){}},field:{hidden:false},closest(){return this.field}});return elements.get(id)};
+let postLoads=0,adLoads=0,user='writer-one';
+const ctx={dbAdmin:false,dbEditor:true,editorOnlyMode:false,editorSaving:false,editorDirty:false,activeAdminSection:'posts',$,document:{body:{classList:{toggle:(name,yes)=>yes?classes.add(name):classes.delete(name)}},querySelectorAll:()=>nav},window:{scrollTo(){}},PublicationDB:{user:()=>({id:user})},loadDbPosts:()=>postLoads++,loadOverview(){},loadAdUnits:()=>adLoads++,nativeSection(){throw Error('Restricted workspace accessed')},confirm:()=>true};vm.createContext(ctx);
+for(const name of ['canEditPosts','ownedPostFilter','editorDraftKey'])vm.runInContext(source.split('\n').find(x=>x.startsWith('function '+name+'(')),ctx);
+vm.runInContext(source.slice(source.indexOf('function editorAccess()'),source.indexOf('const priorDBState')),ctx);
+vm.runInContext(source.split('\n').find(x=>x.startsWith('section=function')),ctx);
+ctx.editorAccess();assert.equal($('editorFieldset').disabled,false);assert.equal($('adFieldset').disabled,true);assert.ok(classes.has('admin-authenticated'));assert.equal(nav.find(n=>n.dataset.nav==='ads').hidden,true);assert.equal(nav.find(n=>n.dataset.nav==='import').hidden,true);assert.equal($('newCategories').disabled,true);assert.equal(ctx.ownedPostFilter(),'&created_by=eq.writer-one');ctx.section('ads');assert.equal(postLoads,1);assert.equal(adLoads,0);
+const a=ctx.editorDraftKey('new');user='writer-two';assert.notEqual(ctx.editorDraftKey('new'),a);
+ctx.dbEditor=false;ctx.editorAccess();assert.equal($('loginGate').hidden,false);assert.equal($('editorFieldset').disabled,true);assert.ok(!classes.has('admin-authenticated'));
+ctx.dbAdmin=true;ctx.editorAccess();assert.equal($('adFieldset').disabled,false);assert.equal(nav.find(n=>n.dataset.nav==='ads').hidden,false);assert.equal(ctx.ownedPostFilter(),'');ctx.editorOnlyMode=true;ctx.editorAccess();assert.equal($('adFieldset').disabled,true);
+console.log('PASS: editor-only navigation, own-post filters, post-only controls, signed-out gate, admin access and per-account local drafts');

@@ -1,0 +1,1 @@
+window.resolveMediaURL=function(value){try{const u=new URL(value,location.origin);const p="/wp-content/uploads/";if(["http:","https:"].includes(u.protocol)&&["anjupankaj.com","www.anjupankaj.com"].includes(u.hostname)&&u.pathname.startsWith(p))return "https://media.anjupankaj.com/"+u.pathname.slice(p.length)+u.search;return value}catch{return value}};

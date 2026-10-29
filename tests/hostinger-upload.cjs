@@ -1,0 +1,16 @@
+const {readFileSync}=require('node:fs');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const code=readFileSync(__dirname+'/../db-client.js','utf8');
+let uploadCount=0,endpoint='https://media.anjupankaj.com/cms-upload.php',replyURL='https://media.anjupankaj.com/cms-uploads/2026/10/test.jpg',networkFailure=false;
+const requests=[];
+const context={window:{ANJUPANKAJ_DB:{url:'https://example.supabase.co',key:'public-test-key',mediaUploadURL:endpoint}},URL,Blob,FormData,Date,JSON,Error,Number,encodeURIComponent,fetch:async(url,options)=>{requests.push({url,options});if(url.includes('/auth/v1/token'))return {ok:true,status:200,text:async()=>JSON.stringify({user:{id:'editor-test'},access_token:'test-session',refresh_token:'refresh',expires_in:3600})};uploadCount++;if(networkFailure)throw Error('unavailable');return {ok:true,status:201,json:async()=>({url:replyURL})}}};
+vm.createContext(context);vm.runInContext(code,context);
+(async()=>{const db=context.window.PublicationDB;const file=new Blob(['test-image'],{type:'image/jpeg'});
+await assert.rejects(db.uploadMedia(file),/Sign in/);assert.equal(uploadCount,0);
+await db.login('editor@example.test','test-only-password');assert.equal(await db.uploadMedia(file),replyURL);assert.equal(requests.at(-1).url,endpoint);assert.equal(requests.at(-1).options.headers.Authorization,'Bearer test-session');assert(requests.at(-1).options.body instanceof FormData);
+networkFailure=true;await assert.rejects(db.uploadMedia(file),/No file was sent to Supabase Storage/);assert.equal(requests.filter(x=>x.url.includes('/storage/')).length,0);
+networkFailure=false;replyURL='https://untrusted.example/test.jpg';await assert.rejects(db.uploadMedia(file),/Invalid media URL/);
+context.window.ANJUPANKAJ_DB.mediaUploadURL='https://untrusted.example/upload';await assert.rejects(db.uploadMedia(file),/not configured/);
+console.log('PASS: signed-in Hostinger upload, bearer authentication, multipart file, no Storage fallback, origin validation');
+})().catch(e=>{console.error(e);process.exitCode=1});
