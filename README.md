@@ -10,7 +10,7 @@ A separate reporter news portal with an modern photo-led red-and-charcoal newsro
 - Hostinger-only uploads of JPEG, PNG, WebP and GIF up to 5 MB; no Supabase Storage bucket.
 
 ## Current state
-The frontend is runnable and shows clearly marked illustrative sample stories while db-config.js is empty. Sample stories are never written to a database. Production database/authentication, Hostinger upload deployment and custom-domain routing are not active yet. The Supabase organization/project still needs to be selected. No default account or password exists.
+The frontend is configured for the dedicated Supabase project lxocgmwtfnhtbwffsfos. Its public API responds, but the CMS tables were not present at the connection check on 29 October 2026. Run database/install.sql in that project, then database/grant-admin.sql for the supplied existing Auth user. Management access through the connector is unavailable, so installation/admin membership have not been executed or verified by the assistant. No default account or password exists. Hostinger upload deployment and custom-domain routing remain pending. Sample stories are never written to a database.
 
 ## Repository layout
 GitHub's root contains the contents of the local dist/ folder: index.html, portal.js, portal.css, admin/, editor/, assets/ and supporting scripts. database/, server/, docs/ and tests/ live alongside those files. Vercel uses outputDirectory '.'. The Sites source checkout keeps the public files in dist/.

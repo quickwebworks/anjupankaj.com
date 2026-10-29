@@ -1,7 +1,7 @@
 # AnjuPankaj.com setup
 
 ## 1. New Supabase project
-Use a separate Supabase project for this publication. The connected account currently exposes the Social Optical organization; the user has not selected the organization for the new project yet. Creating a project may involve plan limits or costs. Do not substitute the Socialoptical or EarlyNews24 database.
+Use a separate Supabase project for this publication. The user has supplied project lxocgmwtfnhtbwffsfos and its public publishable key. The frontend and the prepared Hostinger cms-config.php now use that project. Do not substitute the Socialoptical or EarlyNews24 database. The connector lacks management access to this project; the initial public API check found the CMS tables missing.
 
 After the new project is ready:
 1. Open its SQL Editor and run database/install.sql once in the empty project. This is the combined installer for the individual database scripts in this repository. It does not create photo buckets or import sample posts.

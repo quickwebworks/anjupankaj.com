@@ -1,1 +1,1 @@
-window.ANJUPANKAJ_DB={url:"",key:"",mediaUploadURL:"https://media.anjupankaj.com/cms-upload.php",sourceSyncEnabled:false};
+window.ANJUPANKAJ_DB={url:"https://lxocgmwtfnhtbwffsfos.supabase.co",key:"sb_publishable_L5jAed90YuLrA_rKVAGqVA_C1zow3iU",mediaUploadURL:"https://media.anjupankaj.com/cms-upload.php",sourceSyncEnabled:false};
