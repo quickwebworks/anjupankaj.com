@@ -1,9 +1,9 @@
 # AnjuPankaj.com — The Reporter’s Desk
 
-A separate reporter news portal with an original warm-paper / forest-green editorial design. This uses the same production architecture as the current EarlyNews24 site: a buildless HTML/CSS/JavaScript frontend, Supabase Postgres/Auth for the CMS, and an authenticated PHP image endpoint on Hostinger. It is not a Next.js project. No content, accounts, project keys or ads are shared with the other publications.
+A separate reporter news portal with an new mobile-first blue-and-white news-app design. This uses the same production architecture as the current EarlyNews24 site: a buildless HTML/CSS/JavaScript frontend, Supabase Postgres/Auth for the CMS, and an authenticated PHP image endpoint on Hostinger. It is not a Next.js project. No content, accounts, project keys or ads are shared with the other publications.
 
 ## Included
-- Responsive homepage, latest-three featured slider, scrolling headlines, category/tag pages, search and article pages.
+- Responsive app-style homepage, latest-three featured slider, scrolling headlines, category/tag pages, global search and article pages. Phones have sticky headers, horizontal category chips, swipeable briefing cards, a topic bottom sheet and fixed bottom navigation. Saved stories stay on the reader’s device using localStorage; no account is required.
 - /admin/ publication administration: post editor, drafts/pending/published counts, taxonomy, 400 MB plain MySQL import, ad editing and editor post-activity records.
 - /editor/ restricted workspace: users can enter and edit their own posts and choose existing categories. No import, advertisement or user administration access.
 - 300 × 250 direct or Google Ad Manager placements, with validated ad-unit settings and diagnostics. Google reporting API integration is not included. No live paid ad unit is preconfigured.
