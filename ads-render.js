@@ -49,7 +49,7 @@ window.loadPublicAds=async()=>{try{const rows=await PublicationDB.request('/rest
  }
  function schedule(){if(queued)return;queued=true;queueMicrotask(()=>{queued=false;scan()})}
  window.renderAdMarkup=placement=>{
-  const a=window.publicAdUnits.get(placement);if(!a)return '';let creative;
+  const a=window.publicAdUnits.get(placement)||(placement==='article_sidebar'?['lead_sidebar','article_inline','feed'].map(key=>window.publicAdUnits.get(key)).find(unit=>unit&&unit.provider!=='sample'):null);if(!a)return '';let creative;
   if(a.provider==='direct'){const image=https(a.image_url),url=https(a.target_url);if(!image||!url)return '';creative='<a class="direct-banner" href="'+escape(url)+'" target="_blank" rel="sponsored noopener noreferrer"><img src="'+escape(image)+'" width="300" height="250" loading="lazy" alt="'+escape(a.label||'Advertisement')+'"></a>'}
   else if(a.provider==='google_ad_manager'){
    if(!PATH.test(a.ad_unit_path||''))return '';
