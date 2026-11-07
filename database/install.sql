@@ -20,7 +20,7 @@ create table public.cms_posts (
  excerpt text not null default '',
  content_html text not null default '',
  featured_image_url text check (featured_image_url is null or featured_image_url ~ '^https?://'),
- status text not null default 'draft' check (status in ('draft','pending','publish','private','future')),
+ status text not null default 'draft' check (status in ('draft','pending','publish','private','future','trash')),
  published_at timestamptz,
  imported_at timestamptz not null default now(),
  unique(source_origin,source_id)
